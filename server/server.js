@@ -5,7 +5,6 @@ var https         = require('https');
 var body_parser   = require('body-parser');
 var Bundler       = require('parcel-bundler');
 var child_process = require('child_process');
-var userid        = require('userid');
 var path          = require('path');
 var fs            = require('fs');
 var marked        = require('marked');
@@ -48,7 +47,7 @@ clang_versions.forEach(function(version){
 
 var app = express();
 app.use(body_parser.json());
-app.use(body_parser.urlencoded({extended: true}));
+app.use(body_parser.urlencoded({extended: true, limit: '2mb'}));
 
 app.post('/format', function(req, res){
 	res.header('Access-Control-Allow-Origin', serverUrl.href);
