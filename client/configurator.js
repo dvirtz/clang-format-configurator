@@ -2,12 +2,16 @@ import FileSaver from 'file-saver';
 import config from '../config.json';
 import jsyaml from "js-yaml"
 import fs from "fs";
+import * as Diff from 'diff';
 
 var example = fs.readFileSync("CodeExample.cpp", 'utf8').toString();
 
 var code;
 var clang_options;
 var clang_version;
+var during_format = false;
+var original_code;
+var diff_str;
 
 $(document).ready(function(){
 	$.ajax({
@@ -28,6 +32,15 @@ $(document).ready(function(){
 	code.setOption('showInvisibles', true);
 	code.setPrintMarginColumn(80);
 	code.$blockScrolling = Infinity;
+
+	code.on('change', function(e){
+		const text = code.getSession().getValue();
+		if (!during_format) {
+			original_code = text;
+		}
+		diff_str = Diff.createPatch('code', original_code, code.getSession().getValue());
+	});
+
 	code.getSession().setValue(example);
 
 
@@ -38,12 +51,23 @@ $(document).ready(function(){
 		save_config(clang_options, clang_version);
 	});
 	$('#load_button').on('change', load_config);
+	$('#compare_button').on('click', function(evt){
+		const targetElement = document.getElementById('diff');
+		const configuration = { inputFormat: 'json', outputFormat: 'side-by-side', drawFileList: false, highlight: true };
+		const diff2htmlUi = new Diff2HtmlUI(targetElement, diff_str, configuration);
+		diff2htmlUi.draw();
+
+		$('#compare_modal').modal('show');
+	});
+
 });
 
 function update_code(data){
+	during_format = true;	
 	var range = code.selection.getRange();
 	code.getSession().setValue(data);
 	code.selection.setRange(range);
+	during_format = false;
 }
 
 function request_update(clang_options, version){

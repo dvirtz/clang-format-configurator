@@ -9,6 +9,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 		<script src="https://ajaxorg.github.io/ace-builds/src-min-noconflict/ace.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
 		<script src="configurator.js"></script>
 		<!-- Google Analytics -->
 		<script>
@@ -78,6 +81,12 @@
 						<span class="btn btn-default btn-file">
 							<i class="fa fa-upload fa-fw"></i> Load	<input id="load_button" type="file">
 						</span>
+						<button
+							class="btn btn-default"
+							id="compare_button"
+						>
+							<i class="fa fa-arrows-h fa-fw"></i> Compare
+						</button>
 						<a
 							class="btn btn-default"
 							href="http://github.com/zed0/clang-format-configurator"
@@ -109,6 +118,20 @@
                     <div class="modal-body" id="error_content">
                     </div>
 	</div>
+			</div>
+		</div>
+		<div class="modal fade" id="compare_modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-xl" role="document" style="width: 90vw;">
+				<div class="modal-content">
+					<div class="modal-header bg-danger">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Compare</h4>
+					</div>
+					<div class="modal-body" id="compare_content">
+							<div id="diff"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
